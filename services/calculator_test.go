@@ -1,71 +1,77 @@
 package services
 
-import "testing"
+import (
+	"testing"
 
-func TestCalculatorAdd_Success(t *testing.T) {
-	cal := &Calculator{
-		Num1: 6,
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/suite"
+)
+
+type CalculatorMock struct {
+	mock.Mock
+}
+
+func (c *CalculatorMock) Add() (result *float64, err error) {
+	args := c.Called()
+	if args.Get(1) != nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*float64), nil
+}
+
+func (c *CalculatorMock) Sub() (result *float64, err error) {
+	args := c.Called()
+	if args.Get(1) != nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*float64), nil
+}
+
+type CalculatorTestSuite struct {
+	suite.Suite
+	calculator Calculator
+	calMock    *CalculatorMock
+}
+
+func (suite *CalculatorTestSuite) SetupTest() {
+	suite.calMock = new(CalculatorMock)
+	suite.calculator = Calculator{
+		Num1: 7,
 		Num2: 1,
-	}
-
-	expected := 7
-	actual, err := cal.Add()
-	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-	}
-
-	if *actual != float64(expected) {
-		t.Errorf("Expected: %v", expected)
 	}
 }
 
-func TestCalculatorAdd_Fail(t *testing.T) {
-	cal := &Calculator{
-		Num1: 6,
-		Num2: 1,
-	}
-
-	expected := 5
-	actual, err := cal.Add()
-	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-	}
-
-	if *actual == float64(expected) {
-		t.Errorf("Expected: %v", expected)
-	}
+func (suite *CalculatorTestSuite) TestCalculatorAdd_Success() {
+	expected := 8.0
+	suite.calMock.On("Add").Return(&expected, nil)
+	actual, err := suite.calculator.Add()
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), expected, *actual)
 }
 
-func TestCalculatorSub_Success(t *testing.T) {
-	cal := &Calculator{
-		Num1: 10,
-		Num2: 5,
-	}
-
-	expected := 5
-	actual, err := cal.Sub()
-	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-	}
-
-	if *actual != float64(expected) {
-		t.Errorf("Expected: %v", expected)
-	}
+func (suite *CalculatorTestSuite) TestCalculatorAdd_Fail() {
+	expected := 10.0
+	suite.calMock.On("Add").Return(&expected, nil)
+	_, err := suite.calculator.Add()
+	assert.Nil(suite.T(), err)
 }
 
-func TestCalculatorSub_Fail(t *testing.T) {
-	cal := &Calculator{
-		Num1: 6,
-		Num2: 1,
-	}
+func (suite *CalculatorTestSuite) TestCalculatorSub_Success() {
+	expected := 6.0
+	suite.calMock.On("Add").Return(&expected, nil)
+	actual, err := suite.calculator.Sub()
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), expected, *actual)
+}
 
-	expected := 10
-	actual, err := cal.Sub()
-	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-	}
+func (suite *CalculatorTestSuite) TestCalculatorSub_Fail() {
+	expected := 10.0
+	suite.calMock.On("Add").Return(&expected, nil)
+	_, err := suite.calculator.Sub()
+	assert.Nil(suite.T(), err)
+}
 
-	if *actual == float64(expected) {
-		t.Errorf("Expected: %v", expected)
-	}
+func TestCalculatorSuite(t *testing.T) {
+	suite.Run(t, new(CalculatorTestSuite))
 }
