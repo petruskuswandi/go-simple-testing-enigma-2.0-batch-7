@@ -59,7 +59,7 @@ func (suite *CalculatorTestSuite) TestCalculatorAdd_Fail() {
 
 func (suite *CalculatorTestSuite) TestCalculatorSub_Success() {
 	expected := 6.0
-	suite.calMock.On("Add").Return(&expected, nil)
+	suite.calMock.On("Sub").Return(&expected, nil)
 	actual, err := suite.calculator.Sub()
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), expected, *actual)
@@ -67,7 +67,7 @@ func (suite *CalculatorTestSuite) TestCalculatorSub_Success() {
 
 func (suite *CalculatorTestSuite) TestCalculatorSub_Fail() {
 	expected := 10.0
-	suite.calMock.On("Add").Return(&expected, nil)
+	suite.calMock.On("Sub").Return(&expected, nil)
 	_, err := suite.calculator.Sub()
 	assert.Nil(suite.T(), err)
 }
