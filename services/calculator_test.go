@@ -72,6 +72,6 @@ func (suite *CalculatorTestSuite) TestCalculatorSub_Fail() {
 	assert.Nil(suite.T(), err)
 }
 
-func TestCalculatorSuite(t *testing.T) {
+func TestCalculatorTestSuite(t *testing.T) {
 	suite.Run(t, new(CalculatorTestSuite))
 }
