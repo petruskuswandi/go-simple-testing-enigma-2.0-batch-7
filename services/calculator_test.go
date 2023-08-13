@@ -30,22 +30,18 @@ func (c *CalculatorMock) Sub() (result *float64, err error) {
 
 type CalculatorTestSuite struct {
 	suite.Suite
-	calculator Calculator
-	calMock    *CalculatorMock
+	calMock *CalculatorMock
 }
 
 func (suite *CalculatorTestSuite) SetupTest() {
 	suite.calMock = new(CalculatorMock)
-	suite.calculator = Calculator{
-		Num1: 7,
-		Num2: 1,
-	}
 }
 
 func (suite *CalculatorTestSuite) TestCalculatorAdd_Success() {
 	expected := 8.0
 	suite.calMock.On("Add").Return(&expected, nil)
-	actual, err := suite.calculator.Add()
+	calSrv := NewCalculatorService(suite.calMock)
+	actual, err := calSrv.CalculatorAdd()
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), expected, *actual)
 }
@@ -53,14 +49,16 @@ func (suite *CalculatorTestSuite) TestCalculatorAdd_Success() {
 func (suite *CalculatorTestSuite) TestCalculatorAdd_Fail() {
 	expected := 10.0
 	suite.calMock.On("Add").Return(&expected, nil)
-	_, err := suite.calculator.Add()
+	calSrv := NewCalculatorService(suite.calMock)
+	_, err := calSrv.CalculatorAdd()
 	assert.Nil(suite.T(), err)
 }
 
 func (suite *CalculatorTestSuite) TestCalculatorSub_Success() {
 	expected := 6.0
 	suite.calMock.On("Sub").Return(&expected, nil)
-	actual, err := suite.calculator.Sub()
+	calSrv := NewCalculatorService(suite.calMock)
+	actual, err := calSrv.CalculatorSub()
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), expected, *actual)
 }
@@ -68,7 +66,8 @@ func (suite *CalculatorTestSuite) TestCalculatorSub_Success() {
 func (suite *CalculatorTestSuite) TestCalculatorSub_Fail() {
 	expected := 10.0
 	suite.calMock.On("Sub").Return(&expected, nil)
-	_, err := suite.calculator.Sub()
+	calSrv := NewCalculatorService(suite.calMock)
+	_, err := calSrv.CalculatorSub()
 	assert.Nil(suite.T(), err)
 }
 

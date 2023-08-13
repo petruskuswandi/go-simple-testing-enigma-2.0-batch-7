@@ -1,6 +1,0 @@
-mode: set
-go-simple-testing/services/calculator.go:8.57,13.2 4 1
-go-simple-testing/services/calculator.go:14.57,19.2 4 1
-go-simple-testing/services/greetings.go:3.35,4.19 1 1
-go-simple-testing/services/greetings.go:4.19,6.3 1 1
-go-simple-testing/services/greetings.go:7.2,7.16 1 1
